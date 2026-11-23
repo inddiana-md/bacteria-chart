@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structura ierarhică a speciilor de bacterii</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 24px;
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06);
+            padding: 24px;
+            width: 100%;
+            max-width: 900px;
+        }
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .subtitle {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: #64748b;
+        }
+        .badge {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #bfdbfe;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 999px;
+        }
+        #chart {
+            width: 100%;
+            height: 760px;
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+            .card {
+                padding: 14px;
+            }
+            #chart {
+                height: 520px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <div>
+                <h1 class="title">Structura ierarhică a speciilor de bacterii</h1>
+                <p class="subtitle">Faceți clic pe o încrengătură sau pe un gen pentru a mări; faceți clic în centru pentru a reveni</p>
+            </div>
+            <span class="badge">39 de specii • 4 încrengături</span>
+        </div>
+        <div id="chart"></div>
+    </div>
+
+    <script>
+        const data = [{
+            type: "sunburst",
+            ids: [
+                // Phyla
+                "Bacillota", "Pseudomonadota", "Actinomycetota", "Deinococcota",
+
+                // Genera
+                "Bacillus", "Lactobacillus", "Peribacillus", "Paenibacillus", "Lactococcus", "Planococcus", "Staphylococcus",
+                "Pseudomonas", "Rhizobium", "Agrobacterium", "Azotobacter", "Pectobacterium", "Bradyrhizobium", "Sinorhizobium", "Xanthomonas", "Acetobacter",
+                "Streptomyces", "Micrococcus", "Clavibacter", "Rhodococcus",
+                "Deinococcus",
+
+                // Species
+                "B. cereus", "B. rugosus", "B. safensis", "B. subtilis", "B. thuringiensis", "B. velezensis",
+                "L. acidophilus", "L. delbrueckii",
+                "P. simplex",
+                "P. pabuli",
+                "L. lactis",
+                "P. ruber",
+                "S. thermophilus",
+
+                "P. fluorescens", "P. putida", "P. poae", "P. chlororaphis",
+                "R. phaseoli", "R. leguminosarum",
+                "A. tumefaciens",
+                "A. chroococcum",
+                "P. carotovorum",
+                "B. japonicum",
+                "S. meliloti",
+                "X. campestris",
+                "A. aceti",
+
+                "S. plicatus", "S. mauvecolor", "S. scabiei", "S. lavendulae", "S. gougerotii", "S. fradiae", "S. albus", "S. massasporeus",
+                "M. yunnanensis", "M. aloeverae",
+                "C. michiganensis",
+                "R. rhodochrous",
+
+                "D. radiophilus"
+            ],
+            labels: [
+                "Bacillota", "Pseudomonadota", "Actinomycetota", "Deinococcota",
+
+                "<i>Bacillus</i>", "<i>Lactobacillus</i>", "<i>Peribacillus</i>", "<i>Paenibacillus</i>", "<i>Lactococcus</i>", "<i>Planococcus</i>", "<i>Staphylococcus</i>",
+                "<i>Pseudomonas</i>", "<i>Rhizobium</i>", "<i>Agrobacterium</i>", "<i>Azotobacter</i>", "<i>Pectobacterium</i>", "<i>Bradyrhizobium</i>", "<i>Sinorhizobium</i>", "<i>Xanthomonas</i>", "<i>Acetobacter</i>",
+                "<i>Streptomyces</i>", "<i>Micrococcus</i>", "<i>Clavibacter</i>", "<i>Rhodococcus</i>",
+                "<i>Deinococcus</i>",
+
+                "<i>B. cereus</i>", "<i>B. rugosus</i>", "<i>B. safensis</i>", "<i>B. subtilis</i>", "<i>B. thuringiensis</i>", "<i>B. velezensis</i>",
+                "<i>L. acidophilus</i>", "<i>L. delbrueckii</i>",
+                "<i>P. simplex</i>",
+                "<i>P. pabuli</i>",
+                "<i>L. lactis</i>",
+                "<i>P. ruber</i>",
+                "<i>S. thermophilus</i>",
+
+                "<i>P. fluorescens</i>", "<i>P. putida</i>", "<i>P. poae</i>", "<i>P. chlororaphis</i>",
+                "<i>R. phaseoli</i>", "<i>R. leguminosarum</i>",
+                "<i>A. tumefaciens</i>",
+                "<i>A. chroococcum</i>",
+                "<i>P. carotovorum</i>",
+                "<i>B. japonicum</i>",
+                "<i>S. meliloti</i>",
+                "<i>X. campestris</i>",
+                "<i>A. aceti</i>",
+
+                "<i>S. plicatus</i>", "<i>S. mauvecolor</i>", "<i>S. scabiei</i>", "<i>S. lavendulae</i>", "<i>S. gougerotii</i>", "<i>S. fradiae</i>", "<i>S. albus</i>", "<i>S. massasporeus</i>",
+                "<i>M. yunnanensis</i>", "<i>M. aloeverae</i>",
+                "<i>C. michiganensis</i>",
+                "<i>R. rhodochrous</i>",
+
+                "<i>D. radiophilus</i>"
+            ],
+            parents: [
+                "", "", "", "",
+
+                "Bacillota", "Bacillota", "Bacillota", "Bacillota", "Bacillota", "Bacillota", "Bacillota",
+                "Pseudomonadota", "Pseudomonadota", "Pseudomonadota", "Pseudomonadota", "Pseudomonadota", "Pseudomonadota", "Pseudomonadota", "Pseudomonadota", "Pseudomonadota",
+                "Actinomycetota", "Actinomycetota", "Actinomycetota", "Actinomycetota",
+                "Deinococcota",
+
+                "Bacillus", "Bacillus", "Bacillus", "Bacillus", "Bacillus", "Bacillus",
+                "Lactobacillus", "Lactobacillus",
+                "Peribacillus",
+                "Paenibacillus",
+                "Lactococcus",
+                "Planococcus",
+                "Staphylococcus",
+
+                "Pseudomonas", "Pseudomonas", "Pseudomonas", "Pseudomonas",
+                "Rhizobium", "Rhizobium",
+                "Agrobacterium",
+                "Azotobacter",
+                "Pectobacterium",
+                "Bradyrhizobium",
+                "Sinorhizobium",
+                "Xanthomonas",
+                "Acetobacter",
+
+                "Streptomyces", "Streptomyces", "Streptomyces", "Streptomyces", "Streptomyces", "Streptomyces", "Streptomyces", "Streptomyces",
+                "Micrococcus", "Micrococcus",
+                "Clavibacter",
+                "Rhodococcus",
+
+                "Deinococcus"
+            ],
+            values: [
+                13, 13, 12, 1,
+
+                6, 2, 1, 1, 1, 1, 1,
+                4, 2, 1, 1, 1, 1, 1, 1, 1,
+                8, 2, 1, 1,
+                1,
+
+                1, 1, 1, 1, 1, 1,
+                1, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+
+                1, 1, 1, 1,
+                1, 1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+
+                1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1,
+                1,
+                1,
+
+                1
+            ],
+            branchvalues: "total",
+            marker: {
+                colors: [
+                    "#f3cb68", "#d8a8f0", "#65c2c8", "#ef9369",
+                    // Genera
+                    "#f3cb68", "#f3cb68", "#f3cb68", "#f3cb68", "#f3cb68", "#f3cb68", "#f3cb68",
+                    "#d8a8f0", "#d8a8f0", "#d8a8f0", "#d8a8f0", "#d8a8f0", "#d8a8f0", "#d8a8f0", "#d8a8f0", "#d8a8f0",
+                    "#65c2c8", "#65c2c8", "#65c2c8", "#65c2c8",
+                    "#ef9369",
+                    // Species
+                    "#f7dc94", "#f7dc94", "#f7dc94", "#f7dc94", "#f7dc94", "#f7dc94",
+                    "#f7dc94", "#f7dc94",
+                    "#f7dc94", "#f7dc94", "#f7dc94", "#f7dc94", "#f7dc94",
+                    "#e4c2f5", "#e4c2f5", "#e4c2f5", "#e4c2f5",
+                    "#e4c2f5", "#e4c2f5",
+                    "#e4c2f5", "#e4c2f5", "#e4c2f5", "#e4c2f5", "#e4c2f5", "#e4c2f5", "#e4c2f5",
+                    "#92d4d8", "#92d4d8", "#92d4d8", "#92d4d8", "#92d4d8", "#92d4d8", "#92d4d8", "#92d4d8",
+                    "#92d4d8", "#92d4d8", "#92d4d8", "#92d4d8",
+                    "#f4b395"
+                ],
+                line: { width: 1.5, color: "#ffffff" }
+            },
+            textfont: { size: 12, color: "#1e293b" },
+            insidetextorientation: "radial",
+            hovertemplate: "<b>%{label}</b><br>Număr de specii: %{value}<extra></extra>"
+        }];
+
+        const layout = {
+            margin: { l: 10, r: 10, b: 10, t: 10 }
+        };
+
+        Plotly.newPlot('chart', data, layout, { responsive: true, displayModeBar: false });
+    </script>
+</body>
+</html>
